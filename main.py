@@ -2,17 +2,27 @@ import time
 import board
 from adafruit_bme280 import basic as adafruit_bme280
 import adafruit_veml7700
+from prometheus_client import start_http_server, Summary
 
+temperature = Summary('temperature', 'Temperature (C)')
+humidity = Summary('humidity', 'Humidity (%)')
+pressure = Summary('pressure', 'Pressure (hPa)')
+light = Summary('light', 'Light')
+lux = Summary('lux', 'Light (lux)')
 
 i2c = board.I2C()
 
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
 veml7700 = adafruit_veml7700.VEML7700(i2c)
 
-while True:
-    print("\nTemperature: %0.1f C" % bme280.temperature)
-    print("Humidity: %0.1f %%" % bme280.relative_humidity)
-    print("Pressure: %0.1f hPa" % bme280.pressure)
-    print("Ambient light:", veml7700.light)
-    print("Lux:", veml7700.lux)
-    time.sleep(2)
+if __name__ == '__main__':
+    # Start up the server to expose the metrics.
+    start_http_server(80)
+    # Generate some requests.
+    while True:
+        temperature.observe(bme280.temperature)
+        humidity.observe(bme280.relative_humidity)
+        pressure.observe(bme280.pressure)
+        light.observe(veml7700.light)
+        lux.observe(veml7700.lux)
+        time.sleep(2)
