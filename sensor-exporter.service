@@ -1,0 +1,14 @@
+[Unit]
+Description=Sensor data exporter
+Documentation=github.com/luk707/sensor-exporter
+After=network-online.target
+
+[Service]
+User=root
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=$PWD/.venv/bin/python $PWD/main.py
+
+[Install]
+WantedBy=multi-user.target
