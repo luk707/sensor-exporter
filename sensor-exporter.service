@@ -1,6 +1,6 @@
 [Unit]
 Description=Sensor data exporter
-Documentation=github.com/luk707/sensor-exporter
+Documentation=https://github.com/luk707/sensor-exporter
 After=network-online.target
 
 [Service]
