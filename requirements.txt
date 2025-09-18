@@ -4,9 +4,7 @@ adafruit-circuitpython-busdevice==5.2.4
 adafruit-circuitpython-pixelbuf==2.0.0
 adafruit-circuitpython-register==1.9.15
 adafruit-circuitpython-requests==1.13.1
-adafruit-circuitpython-seesaw==1.12.0
 adafruit-circuitpython-typing==1.9.1
-adafruit-circuitpython-veml7700==1.1.19
 Adafruit-PlatformDetect==3.45.1
 Adafruit-PureIO==1.1.10
 autopep8==2.0.2
