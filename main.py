@@ -1,22 +1,33 @@
 import time
+import socket
 import board
 from adafruit_bme280 import basic as adafruit_bme280
 from prometheus_client import start_http_server, Summary
 
-temperature = Summary("temperature", "Temperature (C)")
-humidity = Summary("humidity", "Humidity (%)")
-pressure = Summary("pressure", "Pressure (hPa)")
+# Get the hostname of the machine
+HOSTNAME = socket.gethostname()
 
-i2c = board.I2C()
+# Define metrics with a 'hostname' label
+temperature = Summary("temperature", "Temperature (C)", ["hostname"])
+humidity = Summary("humidity", "Humidity (%)", ["hostname"])
+pressure = Summary("pressure", "Pressure (hPa)", ["hostname"])
 
-bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
 
-if __name__ == "__main__":
+def main():
+    # Initialize I2C and sensor
+    i2c = board.I2C()
+    bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+
     # Start up the server to expose the metrics.
     start_http_server(80)
-    # Generate some requests.
+
+    # Continuously collect and expose sensor data
     while True:
-        temperature.observe(bme280.temperature)
-        humidity.observe(bme280.relative_humidity)
-        pressure.observe(bme280.pressure)
+        temperature.labels(HOSTNAME).observe(bme280.temperature)
+        humidity.labels(HOSTNAME).observe(bme280.relative_humidity)
+        pressure.labels(HOSTNAME).observe(bme280.pressure)
         time.sleep(2)
+
+
+if __name__ == "__main__":
+    main()
