@@ -16,7 +16,7 @@ pressure = Summary("pressure", "Pressure (hPa)", ["hostname"])
 def main():
     # Initialize I2C and sensor
     i2c = board.I2C()
-    bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+    bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, 0x76)
 
     # Start up the server to expose the metrics.
     start_http_server(80)
